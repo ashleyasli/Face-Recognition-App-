@@ -32,10 +32,12 @@ class Register extends React.Component {
 			})
 		})
 		.then(response => response.json())
-		.then(user => {
-			if (user) {
-				this.props.loadUser(user)
+		.then(data => {
+			if (data.id) {
+				this.props.loadUser(data)
 				this.props.onRouteChange('home');
+			} else {
+				document.getElementsByClassName('ErrorMessage')[0].innerHTML = 'Something wrong!';
 			}
 		})
 	}
@@ -49,29 +51,31 @@ class Register extends React.Component {
 		      <legend className="f1 fw6 ph0 mh0">Register</legend>
 		      <div className="mt3">
 		        <label className="db fw6 lh-copy f6" htmlFor="name">Name</label>
-		        <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
+		        <input onChange = {this.onNameChange}
+		        className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
 		        type="text" 
 		        name="name" 
 		         id="name"
-		         onChange = {this.onNameChange}
+		         
 		         />
 		      </div>
 		      <div className="mt3">
 		        <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-		        <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
+		        <input onChange = {this.onEmailChange}
+		        className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
 		        type="email" 
 		        name="email-address"  
 		        id="email-address"
-		        onChange = {this.onEmailChange}
+		        
 		        />
 		      </div>
 		      <div className="mv3">
 		        <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-		        <input className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
+		        <input onChange = {this.onPasswordChange}
+		        className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
 		        type="password" 
 		        name="password"  
 		        id="password"
-		        onChange = {this.onPasswordChange}
 		        />
 		      </div>
 		      
@@ -83,6 +87,9 @@ class Register extends React.Component {
 		      type="submit"
 		      value="Register"/>
 		    </div>
+		    <div>
+              <p className='ErrorMessage' style={{color:'red'}}></p>
+            </div>
 		  </div>
 		</main>
 	</article>

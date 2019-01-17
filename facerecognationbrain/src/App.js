@@ -19,7 +19,7 @@ import Rank from './components/Rank/Rank';
 
 
 const app = new Clarifai.App({
- apiKey: 'dd50e5ddf86d4eee8031789f943c3700'
+ apiKey: 'cc88fb4ea96d4d899eb528422194e285'
 });
 
 const particlesOptions = {
@@ -60,14 +60,8 @@ class App extends Component {
       }
     }
 
-    loadUser =(data) => {
-      this.setState( { user: {
-        id: data.id,
-        name: data.name,
-        email:data.email,
-        entries: data.entries,
-        joined: data.joined
-     }})
+    loadUser =(user) => {
+      this.setState( { user: user});
     }
 
     //generate the box position array
@@ -114,7 +108,7 @@ class App extends Component {
                 id: this.state.user.id
               })
             })
-              .then(response => response.json())
+              .then(res => res.json())
               .then(count => {
                   this.setState(Object.assign(this.state.user, {entries: count}))
                   })
@@ -135,7 +129,7 @@ class App extends Component {
 }
 
   render() {
-    const {isSignedIn,imageUrl,route, boxs } = this.state;
+    const {isSignedIn,imageUrl,route, boxs, user } = this.state;
     return (
       <div className = "App">
       <Particles className = 'particles'
@@ -145,7 +139,7 @@ class App extends Component {
       { route === 'home'       
           ? <div>
              <Logo /> 
-             <Rank name={this.state.user.name} entries={this.state.user.entries}/>
+             <Rank user={user}/>
              <ImageLinkForm 
                 onInputChange = {this.onInputChange} 
                 onButtonSubmit = {this.onButtonSubmit} 
