@@ -19,7 +19,7 @@ import Rank from './components/Rank/Rank';
 
 
 const app = new Clarifai.App({
- apiKey: 'cc88fb4ea96d4d899eb528422194e285'
+ apiKey: '2e5d4e7a2139464788c68f1af296e3b0'
 });
 
 const particlesOptions = {
@@ -60,10 +60,15 @@ class App extends Component {
       }
     }
 
-    loadUser =(user) => {
-      this.setState( { user: user});
-    }
-
+    loadUser =(data) => {
+      this.setState( { user: {
+        id: data.id,
+        name: data.name,
+        email:data.email,
+        entries: data.entries,
+        joined: data.joined
+     }})
+}
     //generate the box position array
     calculateFaceLocation = (data) => {
       const clarifaiFace = data.outputs[0].data.regions;
@@ -99,7 +104,7 @@ class App extends Component {
         .predict(
           Clarifai.FACE_DETECT_MODEL, 
           this.state.input)
-        .then(response => {
+         .then(response => {
           if (response) {
             fetch('http://localhost:3000/image',{
               method: 'put',
@@ -108,11 +113,10 @@ class App extends Component {
                 id: this.state.user.id
               })
             })
-              .then(res => res.json())
+              .then(response => response.json())
               .then(count => {
                   this.setState(Object.assign(this.state.user, {entries: count}))
                   })
-
           }
               this.displayFaceBox(this.calculateFaceLocation(response))
             })
@@ -129,7 +133,7 @@ class App extends Component {
 }
 
   render() {
-    const {isSignedIn,imageUrl,route, boxs, user } = this.state;
+    const {isSignedIn,imageUrl,route, boxs } = this.state;
     return (
       <div className = "App">
       <Particles className = 'particles'
@@ -139,7 +143,8 @@ class App extends Component {
       { route === 'home'       
           ? <div>
              <Logo /> 
-             <Rank user={user}/>
+             <Rank name={this.state.user.name}
+                   entries={this.state.user.entries}/>
              <ImageLinkForm 
                 onInputChange = {this.onInputChange} 
                 onButtonSubmit = {this.onButtonSubmit} 
